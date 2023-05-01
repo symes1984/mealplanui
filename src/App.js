@@ -1,25 +1,65 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Paper, 
+  Typography,
+  ThemeProvider,
+  createTheme,
+  styled,
+} from '@mui/material';
 
-function App() {
+const theme = createTheme();
+
+const Root = styled('div')(({ theme }) => ({
+  padding: theme.spacing(2),
+}));
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  minWidth: 650,
+}));
+
+function HomePage() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/getSeasonList')
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Root>
+      <Typography variant="h4" gutterBottom>
+        How y'all doing
+      </Typography>
+      <TableContainer component={Paper}>
+        <StyledTable aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Season Number</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((row) => (
+              <TableRow key={row.seasonNumber}>
+                <TableCell>{row.seasonNumber}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </StyledTable>
+      </TableContainer>
+    </Root>
   );
 }
 
-export default App;
+export default HomePage;

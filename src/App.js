@@ -11,21 +11,35 @@ import {
   Typography,
   ThemeProvider,
   createTheme,
-  styled,
+  styled
 } from '@mui/material';
+import {
+  withStyles
+} from '@mui/styles';
 
 const theme = createTheme();
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(2),
+  backgroundColor: '#d0e1e1'
 }));
 
 const StyledTable = styled(Table)(({ theme }) => ({
   minWidth: 650,
+  backgroundColor: '#c1d7d7'
 }));
+
+const StyledTableRow = withStyles(() => ({
+  root: {
+    '&:hover': {
+      backgroundColor: '#669999',
+    },
+  },
+}))(TableRow);
 
 function HomePage() {
   const [data, setData] = useState([]);
+  const [selectedRowData, setSelectedRowData] = useState([]);
 
   useEffect(() => {
     axios.get('http://localhost:8080/getSeasonList')
@@ -37,6 +51,16 @@ function HomePage() {
       });
   }, []);
 
+  function handleRowClick(rowData) {
+    axios.get(`http://localhost:8080/getEpisodesForSeason?seasonNumber=${rowData.seasonNumber}`)
+        .then(response => {
+          setSelectedRowData(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+  }
+
   return (
     <Root>
       <Typography variant="h4" gutterBottom>
@@ -47,17 +71,41 @@ function HomePage() {
           <TableHead>
             <TableRow>
               <TableCell>Season Number</TableCell>
+              <TableCell>Air Date</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((row) => (
-              <TableRow key={row.seasonNumber}>
+              <StyledTableRow key={row.seasonNumber} onClick={() => handleRowClick(row)}>
                 <TableCell>{row.seasonNumber}</TableCell>
-              </TableRow>
+                <TableCell>{row.airDateStart} - {row.airDateEnd}</TableCell>
+              </StyledTableRow>
             ))}
           </TableBody>
         </StyledTable>
       </TableContainer>
+      {selectedRowData.length > 0 &&
+        <TableContainer component={Paper}>
+          <Table aria-label="sub-table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Episode Number</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Air Date</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {selectedRowData.map((row) => (
+                <TableRow key={row.episodeNumber}>
+                  <TableCell>{row.episodeNumber}</TableCell>
+                  <TableCell>{row.episodeName}</TableCell>
+                  <TableCell>{row.airDate}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      }      
     </Root>
   );
 }

@@ -5,34 +5,56 @@ import {
   TableBody, 
   TableCell, 
   TableContainer, 
-  TableHead, 
+  TableHead,
   TableRow, 
   Paper, 
   Typography,
-  ThemeProvider,
   createTheme,
   styled
 } from '@mui/material';
 import {
   withStyles
 } from '@mui/styles';
+import Menu600 from './components/Menu600';
 
 const theme = createTheme();
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(2),
-  backgroundColor: '#d0e1e1'
+  backgroundColor: '#f5f5f5'
 }));
 
 const StyledTable = styled(Table)(({ theme }) => ({
-  minWidth: 650,
-  backgroundColor: '#c1d7d7'
+  backgroundColor: '#fff',
+  borderRadius: '10px',
+  overflow: 'hidden',
+  boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)'
 }));
+
+const StyledTableHeader = withStyles(() => ({
+  root: {
+    backgroundColor: '#3f51b5',
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+}))(TableHead);
+
+const StyledTableHeaderRow = withStyles(() => ({
+  root: {
+    '&:nth-of-type(even)': {
+      backgroundColor: '#f5f5f5',
+    },
+  },
+}))(TableRow);
 
 const StyledTableRow = withStyles(() => ({
   root: {
+    '&:nth-of-type(even)': {
+      backgroundColor: '#f5f5f5',
+    },
     '&:hover': {
-      backgroundColor: '#669999',
+      backgroundColor: '#e6e6e6',
+      cursor: 'pointer'
     },
   },
 }))(TableRow);
@@ -62,18 +84,18 @@ function HomePage() {
   }
 
   return (
-    <Root>
-      <Typography variant="h4" gutterBottom>
-        How y'all doing
+    <Root>      
+      <Typography variant="h4" gutterBottom style={{ display: 'flex', alignItems: 'center' }}>
+      <Menu600 style={{ marginRight: '10px' }}/> How y'all doing
       </Typography>
       <TableContainer component={Paper}>
         <StyledTable aria-label="simple table">
-          <TableHead>
-            <TableRow>
+          <StyledTableHeader>
+            <StyledTableHeaderRow>
               <TableCell>Season Number</TableCell>
               <TableCell>Air Date</TableCell>
-            </TableRow>
-          </TableHead>
+            </StyledTableHeaderRow>
+          </StyledTableHeader>
           <TableBody>
             {data.map((row) => (
               <StyledTableRow key={row.seasonNumber} onClick={() => handleRowClick(row)}>
@@ -86,24 +108,24 @@ function HomePage() {
       </TableContainer>
       {selectedRowData.length > 0 &&
         <TableContainer component={Paper}>
-          <Table aria-label="sub-table">
-            <TableHead>
-              <TableRow>
+          <StyledTable aria-label="sub-table">
+            <StyledTableHeader>
+              <StyledTableHeaderRow>
                 <TableCell>Episode Number</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Air Date</TableCell>
-              </TableRow>
-            </TableHead>
+              </StyledTableHeaderRow>
+            </StyledTableHeader>
             <TableBody>
               {selectedRowData.map((row) => (
-                <TableRow key={row.episodeNumber}>
+                <StyledTableRow key={row.episodeNumber}>
                   <TableCell>{row.episodeNumber}</TableCell>
                   <TableCell>{row.episodeName}</TableCell>
                   <TableCell>{row.airDate}</TableCell>
-                </TableRow>
+                </StyledTableRow>
               ))}
             </TableBody>
-          </Table>
+          </StyledTable>
         </TableContainer>
       }      
     </Root>

@@ -16,7 +16,8 @@ import {
   withStyles
 } from '@mui/styles';
 import Menu600 from './components/Menu600';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AddModifySeason from './AddModifySeason';
 
 const theme = createTheme();
 
@@ -86,10 +87,8 @@ function HomePage() {
 
   return (
     <Root>      
-      <Typography variant="h4" gutterBottom style={{ display: 'flex', alignItems: 'center' }}>
-      <Router>
-      <Menu600 style={{ marginRight: '10px' }}/> How y'all doing
-      </Router>
+      <Typography variant="h4" gutterBottom style={{ display: 'flex', alignItems: 'center' }}>      
+      <Menu600 style={{ marginRight: '10px' }}/> How y'all doing      
       </Typography>
       <TableContainer component={Paper}>
         <StyledTable aria-label="simple table">

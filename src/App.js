@@ -9,17 +9,15 @@ import {
   TableRow, 
   Paper, 
   Typography,
-  createTheme,
+  //createTheme,
   styled
 } from '@mui/material';
 import {
   withStyles
 } from '@mui/styles';
 import Menu600 from './components/Menu600';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import AddModifySeason from './AddModifySeason';
 
-const theme = createTheme();
+//const theme = createTheme();
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(2),

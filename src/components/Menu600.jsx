@@ -13,16 +13,16 @@ const Menu600 = () => {
 
     // Redirect to the appropriate page based on the selected value
     switch (selectedValue) {
-      case 10:
+      case 20:
         navigate('/add-modify-season');
         break;
-      case 20:
+      case 30:
         navigate('/add-modify-episode');
         break;
-      case 30:
+      case 40:
         navigate('/add-modify-patient');
         break;
-      case 40:
+      case 50:
         navigate('/add-modify-meal');
         break;
       default:
@@ -43,10 +43,10 @@ const Menu600 = () => {
           value={value}
           onChange={handleChange}
         >
-          <MenuItem value={10}>Add/Modify Season</MenuItem>
-          <MenuItem value={20}>Add/Modify Episode</MenuItem>
-          <MenuItem value={30}>Add/Modify Patient</MenuItem>
-          <MenuItem value={40}>Add/Modify Meal</MenuItem>
+          <MenuItem value={20}>Add/Modify Season</MenuItem>
+          <MenuItem value={30}>Add/Modify Episode</MenuItem>
+          <MenuItem value={40}>Add/Modify Patient</MenuItem>
+          <MenuItem value={50}>Add/Modify Meal</MenuItem>
         </Select>
       </FormControl>
     </div>

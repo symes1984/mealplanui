@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Select, MenuItem } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AddModifySeason = () => {
   const [seasonNumber, setSeasonNumber] = useState('');
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [airDateStart, setStartDate] = useState(null);
+  const [airDateEnd, setEndDate] = useState(null);
+  const [seasonType, setSeasonType] = useState('My600LbLife');
 
   const handleSeasonNumberChange = (event) => {
     setSeasonNumber(event.target.value);
@@ -20,44 +23,76 @@ const AddModifySeason = () => {
     setEndDate(date);
   };
 
+  const handleSeasonTypeChange = (event) => {
+    setSeasonType(event.target.value);
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Do something with the seasonName value, such as submit it to a server
-    // or update a local data store.
-    // ...
+    console.log("Season Number: " + seasonNumber + ", airDateStart: " + airDateStart + ", airDateEnd: " + airDateEnd + ", seasonType: " + seasonType);
+    axios.post('http://localhost:8080/saveSeason', {
+      seasonNumber,
+      airDateStart,
+      airDateEnd,
+      seasonType
+    })
+    .then((response) => {
+      // Handle successful response
+      navigate('/success');
+    })
+    .catch((error) => {
+      // Handle error
+    });
+  };
+
+  const navigate = useNavigate();
+
+  const handleCancel = () => {
+    navigate(-1);
   };
 
   return (
     <div style={{ padding: "16px"}}>
       <h1>Add or Modify Season</h1>
-      <div style={{ display: "flex", flexDirection: "row"}}>
+      <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
         <form onSubmit={handleSubmit}>
           <TextField
-            id="season-number"
-            label="Season Number"
+            id="season-number"            
             value={seasonNumber}
             onChange={handleSeasonNumberChange}
+            label="Season Number"
             style={{ marginRight: "8px"}}
-          />        
+          />
+          <Select
+            id="season-type"
+            label="Season Type"
+            value={seasonType}
+            onChange={handleSeasonTypeChange}
+            style={{ width:"200px", marginRight: "8px" }}
+          >
+            <MenuItem value="My600LbLife">My 600lb Life</MenuItem>
+            <MenuItem value="My600LbLife-WATN">Where Are They Now</MenuItem>
+          </Select>        
           <LocalizationProvider dateAdapter={AdapterDayjs}>            
               <DatePicker
                 label="Air Start Date"
-                value={startDate}
+                value={airDateStart}
                 onChange={handleStartDateChange}
                 textField={(params) => <TextField {...params} />}
+                sx={{ marginRight: 1}}                
               />
               <DatePicker
                 label="Air End Date"
-                value={endDate}
+                value={airDateEnd}
                 onChange={handleEndDateChange}
-                textField={(params) => <TextField {...params} />}
+                textField={(params) => <TextField {...params} />}               
               />
           </LocalizationProvider>
           <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "16px"}}>
-            <Button variant="contained" type="cancel" style={{ marginRight: "8px"}}>
+            <Button variant="contained" onClick={handleCancel} style={{ marginRight: "4px"}}>
               Cancel
             </Button>
-            <Button variant="contained" type="submit" style={{ marginLeft: "8px"}}>
+            <Button variant="contained" type="submit" style={{ marginLeft: "4px"}}>
               Submit
             </Button>
           </div>        

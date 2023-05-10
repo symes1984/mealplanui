@@ -15,10 +15,9 @@ function HomePage() {
   return (    
     <Root>           
       <Typography variant="h4" gutterBottom style={{ display: 'flex', alignItems: 'center' }}>      
-      <Menu600/><h3 style={{ marginBottom: '0.5rem'}}>How y'all Doing</h3>   
+      <Menu600/><div style={{marginLeft: "10px"}}>How y'all Doing</div>
       </Typography>         
-      <SeasonList/>           
-     
+      <SeasonList/>                
     </Root>
   );
 }

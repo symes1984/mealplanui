@@ -1,24 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead,
-  TableRow, 
-  Paper,   
-  styled
-} from '@mui/material';
-import {
-  withStyles
-} from '@mui/styles';
-
-
-const Root = styled('div')(({ theme }) => ({
-  padding: theme.spacing(2),
-  backgroundColor: '#f5f5f5'
-}));
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, styled } from '@mui/material';
+import {  withStyles } from '@mui/styles';
+import { Link } from 'react-router-dom';
 
 const StyledTable = styled(Table)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -57,7 +41,7 @@ const StyledTableRow = withStyles(() => ({
 
 function SeasonList() {
   const [data, setData] = useState([]);
-  const [selectedRowData, setSelectedRowData] = useState([]);
+  const [selectedRowData, setSelectedRowData] = useState([]);  
 
   useEffect(() => {
     axios.get('http://localhost:8080/getSeasonList')
@@ -69,31 +53,52 @@ function SeasonList() {
       });
   }, []);
 
-  function handleRowClick(rowData) {
-    axios.get(`http://localhost:8080/getEpisodesForSeason?seasonNumber=${rowData.seasonNumber}`)
-        .then(response => {
-          setSelectedRowData(response.data);
-        })
-        .catch(error => {
-          console.log(error);
-        })
+  function handleRowClick(rowData) {    
+    console.log("selectedRowData: " + selectedRowData.seasonNumber + ", rowData: " + rowData.seasonNumber);
+    if (selectedRowData.seasonNumber !== rowData.seasonNumber) {
+      setSelectedRowData([]);
+      axios.get(`http://localhost:8080/getEpisodesForSeason?seasonNumber=${rowData.seasonNumber}`)
+          .then(response => {
+            const responseData = response.data;
+            responseData.seasonNumber = rowData.seasonNumber;
+            setSelectedRowData(responseData);          
+          })
+          .catch(error => {
+            console.log(error);
+          })
+      }
+      else {
+        setSelectedRowData([]);
+      }
   }
 
   return (
-    <Root>            
+    <div>            
       <TableContainer component={Paper}>
         <StyledTable aria-label="simple table">
           <StyledTableHeader>
             <StyledTableHeaderRow>
               <TableCell>Season Number</TableCell>
               <TableCell>Air Date</TableCell>
+              <TableCell>Type</TableCell>
             </StyledTableHeaderRow>
           </StyledTableHeader>
           <TableBody>
             {data.map((row) => (
               <StyledTableRow key={row.seasonNumber} onClick={() => handleRowClick(row)}>
-                <TableCell>{row.seasonNumber}</TableCell>
+                <TableCell>
+                  <Link 
+                    to={{
+                      pathname: '/add-modify-season',
+                      search: `?seasonNumber=${row.seasonNumber}`,
+                      state: { rowData: row}
+                    }}
+                  >
+                    {row.seasonNumber}
+                  </Link>
+                </TableCell>
                 <TableCell>{row.airDateStart} - {row.airDateEnd}</TableCell>
+                <TableCell>{row.seasonType}</TableCell>
               </StyledTableRow>
             ))}
           </TableBody>
@@ -121,7 +126,7 @@ function SeasonList() {
           </StyledTable>
         </TableContainer>
       }      
-    </Root>
+    </div>
   );
 }
 

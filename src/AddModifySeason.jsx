@@ -1,15 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Select, MenuItem } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import dayjs from 'dayjs';
+
 import axios from 'axios';
 
 const AddModifySeason = () => {
+  const [searchParams] = useSearchParams();
   const [seasonNumber, setSeasonNumber] = useState('');
   const [airDateStart, setStartDate] = useState(null);
   const [airDateEnd, setEndDate] = useState(null);
-  const [seasonType, setSeasonType] = useState('My600LbLife');
+  const [seasonType, setSeasonType] = useState('My600lbLife');  
+
+  useEffect(() => {
+    const params = {
+      seasonNumber: searchParams.get('seasonNumber'),
+      airDateStart: searchParams.get('airDateStart'),
+      airDateEnd: searchParams.get('airDateEnd'),
+      seasonType: searchParams.get('seasonType'),
+    };
+
+    setSeasonNumber(params.seasonNumber || '');
+    setStartDate(params.airDateStart ? new dayjs(params.airDateStart) : null);
+    setEndDate(params.airDateEnd ? new dayjs(params.airDateEnd) : null);
+    setSeasonType(params.seasonType || 'My600lbLife');
+  }, [searchParams]);
 
   const handleSeasonNumberChange = (event) => {
     setSeasonNumber(event.target.value);
@@ -44,7 +61,7 @@ const AddModifySeason = () => {
       // Handle error
     });
   };
-
+  
   const navigate = useNavigate();
 
   const handleCancel = () => {
@@ -70,8 +87,8 @@ const AddModifySeason = () => {
             onChange={handleSeasonTypeChange}
             style={{ width:"200px", marginRight: "8px" }}
           >
-            <MenuItem value="My600LbLife">My 600lb Life</MenuItem>
-            <MenuItem value="My600LbLife-WATN">Where Are They Now</MenuItem>
+            <MenuItem value="My600lbLife">My 600lb Life</MenuItem>
+            <MenuItem value="My600lbLife-WATN">Where Are They Now</MenuItem>
           </Select>        
           <LocalizationProvider dateAdapter={AdapterDayjs}>            
               <DatePicker

@@ -53,8 +53,7 @@ function SeasonList() {
       });
   }, []);
 
-  function handleRowClick(rowData) {    
-    console.log("selectedRowData: " + selectedRowData.seasonNumber + ", rowData: " + rowData.seasonNumber);
+  function handleRowClick(rowData) {        
     if (selectedRowData.seasonNumber !== rowData.seasonNumber) {
       setSelectedRowData([]);
       axios.get(`http://localhost:8080/getEpisodesForSeason?seasonNumber=${rowData.seasonNumber}`)
@@ -70,7 +69,7 @@ function SeasonList() {
       else {
         setSelectedRowData([]);
       }
-  }
+  }  
 
   return (
     <div>            
@@ -90,8 +89,7 @@ function SeasonList() {
                   <Link 
                     to={{
                       pathname: '/add-modify-season',
-                      search: `?seasonNumber=${row.seasonNumber}`,
-                      state: { rowData: row}
+                      search: `?seasonNumber=${row.seasonNumber}&seasonType=${row.seasonType}&airDateStart=${row.airDateStart}&airDateEnd=${row.airDateEnd}`                      
                     }}
                   >
                     {row.seasonNumber}

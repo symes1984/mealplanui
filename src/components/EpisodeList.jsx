@@ -4,7 +4,6 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import {  withStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import EpisodeList from './EpisodeList';
 
 const StyledTable = styled(Table)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -47,13 +46,14 @@ const formatDate = (date) => {
   return format(new Date(date), 'MM/dd/yyyy');
 }
 
-function SeasonList() {
+function EpisodeList(props) {
   const [data, setData] = useState([]);
-  const [selectedRowData, setSelectedRowData] = useState([]);  
-  const [isEpisodeListVisible, setIsEpisodeListVisible] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState([]);    
+  
+  console.log("seasonNumber" + props.seasonNumber);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/getSeasonList')
+    axios.get(`http://localhost:8080/getEpisodesForSeason?seasonNumber=10`)
       .then(response => {
         setData(response.data);
       })
@@ -70,8 +70,7 @@ function SeasonList() {
             const responseData = response.data;
             //if(responseData.seasonNumber != null )
               responseData.seasonNumber = rowData.seasonNumber;            
-            setSelectedRowData(responseData); 
-            setIsEpisodeListVisible(!isEpisodeListVisible);
+            setSelectedRowData(responseData);          
           })
           .catch(error => {
             console.log(error);
@@ -88,43 +87,33 @@ function SeasonList() {
         <StyledTable aria-label="simple table">
           <StyledTableHeader>
             <StyledTableHeaderRow>
-              <TableCell>Season Number</TableCell>
-              <TableCell>Air Date</TableCell>
-              <TableCell>Type</TableCell>
+                <TableCell>Episode Number</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Air Date</TableCell>
             </StyledTableHeaderRow>
           </StyledTableHeader>
-          <TableBody>            
+          <TableBody>
             {data.map((row) => (
-              <React.Fragment key={row.seasonNumber}>
-                <StyledTableRow key={row.seasonNumber} onClick={() => handleRowClick(row)}>
-                  <TableCell>
-                    <Link 
-                      to={{
-                        pathname: '/add-modify-season',
-                        search: `?seasonNumber=${row.seasonNumber}&seasonType=${row.seasonType}&airDateStart=${row.airDateStart}&airDateEnd=${row.airDateEnd}`                      
-                      }}
-                    >
-                      {row.seasonNumber}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{`${formatDate(row.airDateStart)}`} - {`${formatDate(row.airDateEnd)}`}</TableCell>
-                  <TableCell>{row.seasonType}</TableCell>
-                </StyledTableRow>                              
-                {selectedRowData.seasonNumber === row.seasonNumber &&                  
-                  <StyledTableRow>
-                    <TableCell colSpan={3}>
-                      <EpisodeList seasonNumber={row.seasonNumber}/>
-                    </TableCell>
-                  </StyledTableRow>
-                }
-              </React.Fragment>              
-            ))}            
+              <StyledTableRow key={row.episodeNumber} onClick={() => handleRowClick(row)}>
+                <TableCell>
+                  <Link 
+                    to={{
+                      pathname: '/add-modify-episode',
+                      search: `?episodeNumber=${row.episodeNumber}&episodeName=${row.episodeName}&airDate=${row.airDate}`                      
+                    }}
+                  >
+                    {row.episodeNumber}
+                  </Link>
+                </TableCell>
+                <TableCell>{row.episodeName}</TableCell>
+                <TableCell>{`${formatDate(row.airDate)}`}</TableCell>                
+              </StyledTableRow>
+            ))}
           </TableBody>
         </StyledTable>
-      </TableContainer>                  
+      </TableContainer>      
     </div>
-    
   );
 }
 
-export default SeasonList;
+export default EpisodeList;

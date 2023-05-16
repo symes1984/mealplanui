@@ -46,8 +46,7 @@ const AddModifySeason = () => {
   }
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Season Number: " + seasonNumber + ", airDateStart: " + airDateStart + ", airDateEnd: " + airDateEnd + ", seasonType: " + seasonType);
+    event.preventDefault();    
     axios.post('http://localhost:8080/saveSeason', {
       seasonNumber,
       airDateStart,

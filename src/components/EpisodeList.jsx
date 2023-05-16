@@ -51,8 +51,7 @@ function EpisodeList(props) {
   const [selectedRowData, setSelectedRowData] = useState([]);     
   const seasonNumberInput = props;   
 
-  useEffect(() => {
-    console.log("EpisodeList: " + seasonNumberInput.seasonNumber);
+  useEffect(() => {    
     axios.get(`http://localhost:8080/getEpisodesForSeason?seasonNumber=${seasonNumberInput.seasonNumber}`)
       .then(response => {
         setData(response.data);
@@ -110,7 +109,13 @@ function EpisodeList(props) {
                   <TableCell>{`${formatDate(row.airDate)}`}</TableCell>                
                 </StyledTableRow>
             ))
-            ) : (<p>No episodes found</p>)
+            ) : (
+              <StyledTableRow>
+                <TableCell colSpan={3}>
+                  <p>No episodes found</p>
+                </TableCell>
+              </StyledTableRow>
+              )
           }
           </TableBody>
         </StyledTable>

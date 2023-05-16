@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AddModifySeason from './AddModifySeason';
+import AddModifyEpisode from './AddModifyEpisode';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,6 +14,7 @@ root.render(
       <Routes>
         <Route path="*" element={<App/>} />
         <Route path="/add-modify-season" element={<AddModifySeason />} />          
+        <Route path="/add-modify-episode" element={<AddModifyEpisode />} />
       </Routes>    
     </BrowserRouter>
   </React.StrictMode>

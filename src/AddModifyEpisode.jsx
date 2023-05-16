@@ -5,6 +5,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import PatientList from './components/PatientList';
 
 const AddModifyEpisode = () => {
     const [searchParams] = useSearchParams();
@@ -85,7 +86,10 @@ const AddModifyEpisode = () => {
                         textField={(params) => <TextField {...params} />}
                         sx={{ marginRight: 1}}                
                     />
-                </LocalizationProvider>                                            
+                </LocalizationProvider>
+                <div style={{ padding: "16px"}}>            
+                    <PatientList episodeNumber={episodeNumber}/>
+                </div>                                            
                 <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "16px"}}>
                     <Button variant="contained" onClick={handleCancel} style={{ marginRight: "4px"}}>
                         Cancel

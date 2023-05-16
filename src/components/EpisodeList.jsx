@@ -48,19 +48,19 @@ const formatDate = (date) => {
 
 function EpisodeList(props) {
   const [data, setData] = useState([]);
-  const [selectedRowData, setSelectedRowData] = useState([]);    
-  
-  console.log("seasonNumber" + props.seasonNumber);
+  const [selectedRowData, setSelectedRowData] = useState([]);     
+  const seasonNumberInput = props;   
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/getEpisodesForSeason?seasonNumber=10`)
+    console.log("EpisodeList: " + seasonNumberInput.seasonNumber);
+    axios.get(`http://localhost:8080/getEpisodesForSeason?seasonNumber=${seasonNumberInput.seasonNumber}`)
       .then(response => {
         setData(response.data);
       })
       .catch(error => {
         console.log(error);
       });
-  }, []);
+  }, [seasonNumberInput]);
 
   function handleRowClick(rowData) {        
     if (selectedRowData.seasonNumber !== rowData.seasonNumber) {
@@ -93,22 +93,25 @@ function EpisodeList(props) {
             </StyledTableHeaderRow>
           </StyledTableHeader>
           <TableBody>
-            {data.map((row) => (
-              <StyledTableRow key={row.episodeNumber} onClick={() => handleRowClick(row)}>
-                <TableCell>
-                  <Link 
-                    to={{
-                      pathname: '/add-modify-episode',
-                      search: `?episodeNumber=${row.episodeNumber}&episodeName=${row.episodeName}&airDate=${row.airDate}`                      
-                    }}
-                  >
-                    {row.episodeNumber}
-                  </Link>
-                </TableCell>
-                <TableCell>{row.episodeName}</TableCell>
-                <TableCell>{`${formatDate(row.airDate)}`}</TableCell>                
-              </StyledTableRow>
-            ))}
+            {data && data.length > 0 ? (
+              data.map((row) => (
+                <StyledTableRow key={row.episodeNumber} onClick={() => handleRowClick(row)}>
+                  <TableCell>
+                    <Link 
+                      to={{
+                        pathname: '/add-modify-episode',
+                        search: `?episodeNumber=${row.episodeNumber}&episodeName=${row.episodeName}&airDate=${row.airDate}`                      
+                      }}
+                    >
+                      {row.episodeNumber}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{row.episodeName}</TableCell>
+                  <TableCell>{`${formatDate(row.airDate)}`}</TableCell>                
+                </StyledTableRow>
+            ))
+            ) : (<p>No episodes found</p>)
+          }
           </TableBody>
         </StyledTable>
       </TableContainer>      

@@ -4,6 +4,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import EpisodeList from './components/EpisodeList';
 
 import axios from 'axios';
 
@@ -20,7 +21,7 @@ const AddModifySeason = () => {
       airDateStart: searchParams.get('airDateStart'),
       airDateEnd: searchParams.get('airDateEnd'),
       seasonType: searchParams.get('seasonType'),
-    };
+    };    
 
     setSeasonNumber(params.seasonNumber || '');
     setStartDate(params.airDateStart ? new dayjs(params.airDateStart) : null);
@@ -105,6 +106,9 @@ const AddModifySeason = () => {
                 textField={(params) => <TextField {...params} />}               
               />
           </LocalizationProvider>
+          <div style={{ padding: "16px"}}>            
+            <EpisodeList seasonNumber={seasonNumber}/>
+          </div>
           <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "16px"}}>
             <Button variant="contained" onClick={handleCancel} style={{ marginRight: "4px"}}>
               Cancel

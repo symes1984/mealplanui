@@ -4,7 +4,8 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import {  withStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import EpisodeList from './EpisodeList';
+import EpisodeList from './EpisodeList'
+import '../css/600.css';
 
 const StyledTable = styled(Table)(({ theme }) => ({
   backgroundColor: '#fff',

@@ -3,8 +3,8 @@ import {
   Typography,
   styled
 } from '@mui/material';
-import Menu600 from './components/Menu600';
 import SeasonList from './components/SeasonList';
+import Header from './components/Header';
 
 const Root = styled('div')(({ theme }) => ({
   padding: theme.spacing(2),
@@ -15,9 +15,9 @@ function HomePage() {
   return (    
     <Root>           
       <Typography variant="h4" gutterBottom style={{ display: 'flex', alignItems: 'center' }}>      
-      <Menu600/><div style={{marginLeft: "10px"}}>How y'all Doing</div>
+        <Header/>
       </Typography>         
-      <SeasonList/>                
+      <SeasonList/>           
     </Root>
   );
 }
